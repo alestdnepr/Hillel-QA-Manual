@@ -1,0 +1,135 @@
+CREATE DATABASE HW27_SQL
+
+
+CREATE TABLE car_brands (
+id INT NOT NULL,
+brand VARCHAR(10) NOT NULL,
+PRIMARY KEY (id)
+);
+
+
+CREATE TABLE car_models (
+id INT NOT NULL,
+carBrandId INT NOT NULL,
+model VARCHAR(20) NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (carBrandId) REFERENCES car_brands(id)
+);
+
+
+CREATE TABLE users (
+id INT NOT NULL UNIQUE,
+firstName VARCHAR(20) NOT NULL,
+lastName VARCHAR(20) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+password VARCHAR(15) NOT NULL,
+age INT CHECK (Age>=18),
+address VARCHAR(200),
+city VARCHAR(100) DEFAULT 'World',
+PRIMARY KEY (id)
+);
+
+
+CREATE TABLE cars (
+id INT NOT NULL,
+userId INT NOT NULL,
+carBrandId INT NOT NULL,
+carModelId INT NOT NULL,
+mileage INT,
+initialMilleage INT NOT NULL DEFAULT 0,
+createdDate DATETIME NOT NULL,
+updateDate DATETIME NOT NULL,
+FOREIGN KEY (userId) REFERENCES users(id),
+FOREIGN KEY (carBrandId) REFERENCES car_brands(id),
+FOREIGN KEY (carModelId) REFERENCES car_models(id)
+);
+
+
+INSERT INTO car_brands (id, brand)
+VALUES
+(1, "Audi"), 
+(2, "BMW"),
+(3, "Ford"),
+(4, "Porshe"),
+(5, "Fiat"),
+(6, "Tesla");
+
+
+INSERT INTO car_models (id, carBrandId, model)
+VALUES
+(1, 1, 'TT'),
+(2, 1, 'R8'),
+(3, 1, 'Q7'),
+(4, 1, 'A6'),
+(5, 1, 'A8'),
+(6, 2, '3'),
+(7, 2, '5'),
+(8, 2, 'X5'),
+(9, 2, 'X6'),
+(10, 2, 'Z3'),
+(11, 3, 'Fiesta'),
+(12, 3, 'Focus'),
+(13, 3, 'Fusion'),
+(14, 3, 'Mondeo'),
+(15, 3, 'Sierra'),
+(16, 4, '911'),
+(17, 4, 'Cayenne'),
+(18, 4, 'Panamera'),
+(19, 5, 'Palio'),
+(20, 5, 'Ducato'),
+(21, 5, 'Panda'),
+(22, 5, 'Punto'),
+(23, 5, 'Scudo'),
+(24, 6, '3');
+
+
+INSERT INTO users (id, firstName, lastName, email, password, age, address, city)
+VALUES
+(1, 'Charlie', 'Chaplin', 'chaplin@example.com', 'ChCh16041889', 88, 'Tramp Street,16', 'Pickway'),
+(2, 'Buster', 'Keaton', 'keaton@gmail.com', 'BuKe04101895', 70, 'Unperturbed Street,4', 'London'),
+(3, 'Louis', 'de Funes', 'defunes@example.com', 'LdeF31071914', 68, 'Fantomas Street,31', 'Courbevoie'),
+(4, 'Evgeniy', 'Evstigneev', 'evstigneev@gmail.com', 'EvEv09101926', 65, 'Favorite genius Street,9', 'Gorky'),
+(5, 'Oleg', 'Yankovsky', 'yankovsky@mailfence.com', 'OlYa23021944', 65, 'Genius Street,23', 'Big Dzhezkazgan'),
+(6, 'Leonid', 'Filatov', 'filatov@fastmail.com', 'LeFi24121946', 56, 'Fedot Street,24', 'Kazan'),
+(7, 'Vladimir', 'Vysotsky', 'vysotsky@rambler.ru', 'VlVy25011938', 42, 'Zheglov Street,25', 'Moscow'),
+(8, 'Leonid', 'Kuravlev', 'kuravlev@rambler.ru', 'LeKu08101936', 85, 'Miloslavsky Street,8', 'Moscow'),
+(9, 'Mikael', 'Tariverdiev', 'tariverdiev@tuta.com', 'MiTa15081931', 64, 'Snow Street,15', 'Tiflis'),
+(10, 'Anatoly', 'Papanov', 'papanov@milbox.org', 'AnPa31101922', 64, 'Wolf Street,31', 'Vyazma'),
+(11, 'Andrey', 'Mironov', 'mironov@rambler.ru', 'AnMi07031941', 46, 'Diamond Hand Street,7', 'Moscow'),
+(12, 'Lyudmila', 'Gurchenko', 'gurchenko@ukr.net', 'LyGu12111935', 75, 'Love and Doves Street,12', 'Kharkov'),
+(13, 'Eldar', 'Ryazanov', 'ryazanov@zoho.com', 'ElRy18111927', 88, 'Legendary Street,18', 'Samara'),
+(14, 'Leonid', 'Gaidai', 'gaidai@kolabnow.com', 'LeGa30011923', 70, 'Legendary Street,30', 'Svobodny'),
+(15, 'Alexey', 'Smirnov', 'smirnov@gmail.com', 'AlSm28021920', 59, 'Victory Day Street,28', 'Danilov'),
+(16, 'Vasily', 'Shukshin', 'shukshin@example.com', 'VaSh25071929', 45, 'Red viburnum Street,25', 'Srostki'),
+(17, 'Nonna', 'Mordyukova', 'mordyukova@posteo.de', 'NoMo25111925', 82, 'Native Dnepr Street,25', 'Konstantinovka'),
+(18, 'Frunzik', 'Mkrtchyan', 'mkrtchyan@fastmail.com', 'FrMk04071930', 63, 'Sun of Armenia Street,4', 'Leninakan'),
+(19, 'Paula', 'Raksa', 'raksa@ukr.net', 'PaRa14041941Liv', 84, 'Beautiful Street,14', 'Lida'),
+(20, 'Makoto', 'Shinkai', 'shinkai@proton.me', 'MaSh09021973Liv', 52, 'Anime genius Street,9', 'Koumi');
+
+
+INSERT INTO cars (id, userId, carBrandId, carModelId, mileage, initialMilleage, createdDate, updateDate)
+VALUES
+(1, 1, 1, 1, 100, 5, '2025-07-11 01:23:45', '2025-07-12 12:34:56'),
+(2, 2, 1, 2, 200, 10, '2025-07-10 01:23:45', '2025-07-12 12:34:56'),
+(3, 3, 1, 3, 300, 15, '2025-07-09 01:23:45', '2025-07-12 12:34:56'),
+(4, 4, 1, 4, 400, 20, '2025-07-08 01:23:45', '2025-07-12 12:34:56'),
+(5, 5, 1, 5, 500, 100, '2025-07-07 01:23:45', '2025-07-12 12:34:56'),
+(6, 6, 2, 6, 600, 110, '2025-07-06 01:23:45', '2025-07-12 12:34:56'),
+(7, 7, 2, 7, 700, 120, '2025-07-05 01:23:45', '2025-07-12 12:34:56'),
+(8, 8, 2, 8, 800, 150, '2025-07-04 01:23:45', '2025-07-12 12:34:56'),
+(9, 9, 2, 9, 900, 50, '2025-07-03 01:23:45', '2025-07-12 12:34:56'),
+(10, 10, 2, 10, 1001, 100, '2025-07-02 01:23:45', '2025-07-12 12:34:56'),
+(11, 11, 3, 11, 1020, 15, '2025-07-01 01:23:45', '2025-07-12 12:34:56'),
+(12, 12, 3, 12, 1078, 501, '2025-06-30 01:23:45', '2025-07-12 12:34:56'),
+(13, 13, 3, 13, 610, 255, '2025-06-29 01:23:45', '2025-07-12 12:34:56'),
+(14, 14, 3, 14, 60, 12, '2025-05-11 01:23:45', '2025-07-12 12:34:56'),
+(15, 15, 3, 15, 1008, 110, '2025-04-11 01:23:45', '2025-07-12 12:34:56'),
+(16, 16, 4, 16, 1050, 155, '2025-03-10 01:23:45', '2025-07-12 12:34:56'),
+(17, 17, 4, 17, 1090, 785, '2025-03-09 01:23:45', '2025-07-12 12:34:56'),
+(18, 18, 4, 18, 120, 10, '2025-02-20 01:23:45', '2025-07-12 12:34:56'),
+(19, 19, 5, 19, 879, 30, '2025-02-11 01:23:45', '2025-07-12 12:34:56'),
+(20, 20, 5, 20, 270, 15, '2025-02-10 01:23:45', '2025-07-12 12:34:56'),
+(21, 3, 5, 21, 4560, 1555, '2025-02-07 01:23:45', '2025-07-12 12:34:56'),
+(22, 20, 6, 24, 1700, 150, '2025-01-30 01:23:45', '2025-07-12 12:34:56'),
+(23, 7, 5, 23, 1870, 1, '2025-01-15 01:23:45', '2025-07-12 12:34:56'),
+(24, 1, 5, 22, 3500, 1500, '2025-01-01 01:23:45', '2025-07-12 12:34:56');

@@ -1,0 +1,84 @@
+INSERT INTO cars (id, userId, carBrandId, carModelId, mileage, initialMilleage, createdDate, updateDate)
+VALUES
+(25, 1, 1, 1, 100, 5, '2025-07-11 01:23:45', '2025-07-12 12:34:56'),
+(26, 2, 1, 2, 200, 10, '2025-07-10 01:23:45', '2025-07-12 12:34:56'),
+(27, 3, 1, 3, 300, 15, '2025-07-09 01:23:45', '2025-07-12 12:34:56'),
+(28, 4, 1, 4, 400, 20, '2025-07-08 01:23:45', '2025-07-12 12:34:56'),
+(29, 5, 1, 5, 500, 100, '2025-07-07 01:23:45', '2025-07-12 12:34:56'),
+(30, 5, 1, 5, 500, 100, '2025-07-07 01:23:45', '2025-07-12 12:34:56');
+
+
+/*1. Знайти власників у яких у імені є послідовність букв "am" ("an").*/
+
+SELECT * FROM users
+WHERE firstName LIKE '%an%'
+
+SELECT * FROM users
+WHERE lastName LIKE '%an%'
+
+SELECT * FROM users
+WHERE firstName LIKE '%an%'
+OR lastName LIKE '%an%'
+
+SELECT CONCAT(firstName, ' ', lastName) FROM users
+WHERE firstName LIKE '%an%'
+OR lastName LIKE '%an%'
+
+
+/*2. Знайти найбільшу витрату серед Audi.*/
+
+SELECT MAX(mileage)
+FROM cars
+WHERE carBrandId = 1
+
+SELECT * FROM cars
+WHERE carBrandId = 1
+AND mileage ORDER BY mileage DESC
+
+SELECT MAX(mileage) FROM car_brands
+LEFT JOIN cars ON car_brands.id=cars.carBrandId
+WHERE brand = 'Audi'
+
+
+/*3. Знайти кількість моделей у брендів AUDI та BMW. Вивести стовпчики count_models (кількість моделей) та car_id (id бренду).*/
+
+SELECT CONCAT(id, ' - ', brand),
+    (SELECT COUNT(*) FROM car_models WHERE car_models.carBrandId=car_brands.id) AS count_models
+FROM car_brands
+WHERE brand='Audi' OR brand='BMW'
+
+SELECT DISTINCT CONCAT(car_brands.id, ' - ', brand),
+    (SELECT COUNT(*) FROM cars WHERE cars.carBrandId=car_brands.id) AS count_models 
+FROM car_models JOIN car_brands ON car_models.carBrandId=car_brands.id
+WHERE brand='Audi' OR brand='BMW'
+
+SELECT carBrandId,
+    (SELECT COUNT(*) FROM cars WHERE cars.carModelId=car_models.id) AS count_models 
+FROM car_models JOIN car_brands ON car_models.carBrandId=car_brands.id
+WHERE carBrandId=1 OR carBrandId=2
+
+SELECT brand,
+    (SELECT COUNT(*) FROM cars WHERE cars.carModelId=car_models.id) AS count_models 
+FROM car_models JOIN car_brands ON car_models.carBrandId=car_brands.id
+WHERE brand='Audi' OR brand='BMW'
+
+SELECT CONCAT(car_brands.id, ' - ', brand),
+    (SELECT COUNT(*) FROM cars WHERE cars.carModelId=car_models.id) AS count_models 
+FROM car_models JOIN car_brands ON car_models.carBrandId=car_brands.id
+WHERE brand='Audi' OR brand='BMW'
+
+
+/*4. Знайдіть кількість власників за марками та моделями автомобілів. Вивести три стовпчики car_model, car_brand і user_count.*/
+
+SELECT brand, model,
+    (SELECT COUNT(DISTINCT userId) AS user_count) FROM cars
+JOIN car_brands ON cars.carBrandId=car_brands.id
+JOIN car_models ON cars.carModelId=car_models.id
+GROUP BY brand, model;
+
+
+/*5. Знайти імена юзерів, у яких є машини.*/
+
+SELECT DISTINCT CONCAT(users.firstName, ' ', users.lastName) FROM users
+LEFT JOIN cars ON users.id= cars.userId
+WHERE cars.carBrandId IS NOT NULL
